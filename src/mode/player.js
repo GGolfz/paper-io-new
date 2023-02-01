@@ -174,6 +174,15 @@ function paintUIBar(ctx) {
 	const killsOffset = 20 + BAR_WIDTH + barOffset;
 	ctx.fillText(killsText, killsOffset, consts.CELL_WIDTH - 5);
 
+	// Kill Event offset
+	const killEventOffset = consts.CELL_WIDTH + 20;
+	ctx.fillStyle = "black"
+	ctx.fillText("Kill Event: ", 0, killEventOffset);
+	const killEvent = client.getKillEvent()
+	for(let i = 0 ; i < killEvent.length ; i++) {
+		ctx.fillText(`${killEvent[i].killer} killed ${killEvent[i].other}`, 0, killEventOffset + (i + 1) * 20);
+	}
+
 	//Calcuate rank
 	const sorted = [];
 	client.getPlayers().forEach(val => {

@@ -2,7 +2,7 @@ export const config = {
 	"dev": true,
 	"port": 8080,
 	"bots": 0,
-	"fps": 60
+	"fps": 120
 };
 
 export const consts = {

@@ -4,6 +4,7 @@ let running = false;
 let user, socket, frame;
 let players, allPlayers;
 let kills;
+let killEvent;
 let timeout = undefined;
 let dirty = false;
 let deadFrames = 0;
@@ -74,6 +75,13 @@ function connectGame(io, url, name, callback, flag) {
 			frameCache = [];
 		}
 	});
+	socket.on("killAlert", (data) => {
+		killEvent.push(data);
+		setTimeout(() => {
+			killEvent.shift();
+			invokeRenderer("paint", []);
+		}, 5000);
+	})
 	socket.on("notifyFrame", processFrame);
 	socket.on("dead", () => {
 		socket.disconnect(); //In case we didn"t get the disconnect call
@@ -232,6 +240,7 @@ function reset() {
 	players = [];
 	allPlayers = [];
 	kills = 0;
+	killEvent = [];
 	invokeRenderer("reset");
 }
 
@@ -244,6 +253,10 @@ function update() {
 	const dead = [];
 	updateFrame(grid, players, dead, (killer, other) => { //addKill
 		if (players[killer] === user && killer !== other) kills++;
+		socket.emit("killNotify", {
+			killer: players[killer].name,
+			other: players[other].name
+		})
 	});
 	dead.forEach(val => {
 		console.log((val.name || "Unnamed") + " is dead");
@@ -265,8 +278,12 @@ function getKills() {
 	return kills;
 }
 
+function getKillEvent () {
+	return killEvent;
+}
+
 // Export stuff
-export { connectGame, changeHeading, getUser, getPlayers, getOthers, disconnect, setRenderer, setAllowAnimation, getKills };
+export { connectGame, changeHeading, getUser, getPlayers, getOthers, disconnect, setRenderer, setAllowAnimation, getKills, getKillEvent };
 export const allowAnimation = {
 	get: function() {
 		return _allowAnimation;
