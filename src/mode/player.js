@@ -175,12 +175,12 @@ function paintUIBar(ctx) {
 	ctx.fillText(killsText, killsOffset, consts.CELL_WIDTH - 5);
 
 	// Kill Event offset
-	const killEventOffset = consts.CELL_WIDTH + 20;
+	const killEventOffset = consts.CELL_WIDTH + 25;
 	ctx.fillStyle = "black"
-	ctx.fillText("Kill Event: ", 0, killEventOffset);
+	ctx.fillText("Kill Event: ", 10, killEventOffset);
 	const killEvent = client.getKillEvent()
 	for(let i = 0 ; i < killEvent.length ; i++) {
-		ctx.fillText(`${killEvent[i].killer} killed ${killEvent[i].other}`, 0, killEventOffset + (i + 1) * 20);
+		ctx.fillText(`${killEvent[i].killer} killed ${killEvent[i].other}`, 10, killEventOffset + (i + 1) * 20);
 	}
 
 	//Calcuate rank
